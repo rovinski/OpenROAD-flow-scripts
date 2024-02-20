@@ -48,12 +48,17 @@ if {[info exist ::env(LATCH_MAP_FILE)]} {
   techmap -map $::env(LATCH_MAP_FILE)
 }
 
+set dfflibmap_args ""
+foreach cell $::env(DONT_USE_CELLS) {
+  lappend dfflibmap_args -dont_use $cell
+}
+
 # Technology mapping of flip-flops
 # dfflibmap only supports one liberty file
 if {[info exist ::env(DFF_LIB_FILE)]} {
-  dfflibmap -liberty $::env(DFF_LIB_FILE)
+  dfflibmap -liberty $::env(DFF_LIB_FILE) {*}$dfflibmap_args
 } else {
-  dfflibmap -liberty $::env(DECOMPRESSED_SC_LIB)
+  dfflibmap -liberty $::env(DECOMPRESSED_SC_LIB) {*}$dfflibmap_args
 }
 opt
 
